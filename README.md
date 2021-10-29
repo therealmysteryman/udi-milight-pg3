@@ -8,14 +8,8 @@ This Poly provides an interface between Milight iBox 1 or 2 and Polyglot v2 serv
 
 Installation instructions
 
-You can install from Polyglot V2 store or manually :
+from Polyglot V3 store
 
-1. cd ~/.polyglot/nodeservers
-2. git clone https://github.com/therealmysteryman/udi-milight-polyglot.git
-3. run ./install.sh to install the required dependency.
-4. Add a custom variable named host containing the IP Address of the Milight iBox ( eg : host 172.16.1.40 )
-    You can add more then one iBox by seperating ip by comma (172.16.1.40,172.16.1.41).
-.
 ## Source
 
 1. Using this Python Library to control the Milight - https://github.com/QuentinCG/Milight-Wifi-Bridge-3.0-Python-Library
