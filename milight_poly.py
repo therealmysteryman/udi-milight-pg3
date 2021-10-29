@@ -106,12 +106,12 @@ class Controller(udi_interface.Node):
         time.sleep(1)
         count = 1
         for myHost in self.milight_host.split(','):
-            self.addNode(MiLightBridge(self, 'bridge' + str(count), 'bridge' + str(count), 'Bridge' + str(count), myHost, self.milight_port))
+            self.poly.addNode(MiLightBridge(self.poly, 'bridge' + str(count), 'bridge' + str(count), 'Bridge' + str(count), myHost, self.milight_port))
             time.sleep(1)
-            self.addNode(MiLightLight(self, 'bridge' + str(count), 'bridge' + str(count) + '_zone1', 'Zone1', myHost, self.milight_port))
-            self.addNode(MiLightLight(self, 'bridge' + str(count), 'bridge' + str(count) + '_zone2', 'Zone2', myHost, self.milight_port))
-            self.addNode(MiLightLight(self, 'bridge' + str(count), 'bridge' + str(count) + '_zone3', 'Zone3', myHost, self.milight_port))
-            self.addNode(MiLightLight(self, 'bridge' + str(count), 'bridge' + str(count) + '_zone4', 'Zone4', myHost, self.milight_port))
+            self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone1', 'Zone1', myHost, self.milight_port))
+            self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone2', 'Zone2', myHost, self.milight_port))
+            self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone3', 'Zone3', myHost, self.milight_port))
+            self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone4', 'Zone4', myHost, self.milight_port))
             count = count + 1
 
     def delete(self):
