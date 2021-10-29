@@ -35,6 +35,7 @@ class Controller(udi_interface.Node):
 
     def __init__(self, polyglot, primary, address, name):
         super(Controller, self).__init__(polyglot, primary, address, name)
+        self.poly = polyglot
         self.name = 'MiLight'
         self.initialized = False
         self.queryON = False
@@ -48,7 +49,7 @@ class Controller(udi_interface.Node):
         polyglot.subscribe(polyglot.POLL, self.poll)
 
         polyglot.ready()
-        polyglot.addNode(self
+        polyglot.addNode(self)
 
     def parameterHandler(self, params):
         self.poly.Notices.clear()
