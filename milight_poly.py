@@ -6,15 +6,14 @@ based on the NodeServer template for Polyglot v2 written in Python2/3 by Einstei
 MiLight functionality based on 'Milight-Wifi-Bridge-3.0-Python-Library' project by QuentinCG (https://github.com/QuentinCG/Milight-Wifi-Bridge-3.0-Python-Library)
 """
 
-import polyinterface
+import udi_interface
 import time
 import json
 import sys
 from copy import deepcopy
 from MilightWifiBridge import MilightWifiBridge
 
-
-LOGGER = polyinterface.LOGGER
+LOGGER = udi_interface.LOGGER
 SERVERDATA = json.load(open('server.json'))
 VERSION = SERVERDATA['credits'][0]['version']
 
@@ -29,13 +28,13 @@ def get_profile_info(logger):
     f.close()
     return { 'version': pv }
 
-class Controller(polyinterface.Controller):
+class Controller(udi_interface.Node):
 
     COLOR_VALUE = [0x85,0xBA,0x7A,0xD9,0x54,0x1E,0xFF,0x3B]
     WHITE_TEMP = [0,8,35,61,100]
 
-    def __init__(self, polyglot):
-        super(Controller, self).__init__(polyglot)
+    def __init__(self, polyglot, primary, address, name):
+        super(Controller, self).__init__(polyglot, primary, address, name)
         self.name = 'MiLight'
         self.initialized = False
         self.queryON = False
@@ -43,39 +42,48 @@ class Controller(polyinterface.Controller):
         self.milight_port = 5987
         self.tries = 0
         self.hb = 0
+        
+        polyglot.subscribe(polyglot.START, self.start, address)
+        polyglot.subscribe(polyglot.CUSTOMPARAMS, self.parameterHandler)
+        polyglot.subscribe(polyglot.POLL, self.poll)
 
-    def start(self):
-        LOGGER.info('Started MiLight for v2 NodeServer version %s', str(VERSION))
-        self.setDriver('ST', 0)
+        polyglot.ready()
+        polyglot.addNode(self
+
+    def parameterHandler(self, params):
+        self.poly.Notices.clear()
         try:
-            if 'host' in self.polyConfig['customParams']:
-                self.milight_host = self.polyConfig['customParams']['host']
+            if 'host' in params:
+                self.host = params['host']
             else:
-                self.milight_host = ""
+                self.host = ""
 
-            if 'port' in self.polyConfig['customParams']:
-                self.milight_port = int(self.polyConfig['customParams']['port'])
+            if 'port' in params:
+                self.milight_port = int(params['host'])
             else:
                 self.milight_port = 5987
-
-            if self.milight_host == "" :
+                         
+            if self.host == "" :
+                self.poly.Notices['cfg'] = 'MiLight requires the "host" parameter to be specified.'
                 LOGGER.error('MiLight requires \'host\' parameters to be specified in custom configuration.')
                 return False
             else:
                 self.discover()
-                self.query()
-
+                           
         except Exception as ex:
-            LOGGER.error('Error starting MiLight NodeServer: %s', str(ex))
-        self.check_profile()
-        self.heartbeat()
-
-    def shortPoll(self):
-        pass
-
-    def longPoll(self):
-        self.heartbeat()
-
+            LOGGER.error('Error starting MiLight NodeServer: %s', str(ex))                     
+                         
+    def start(self):
+        LOGGER.info('Started MiLight for v3 NodeServer version %s', str(VERSION))
+        self.setDriver('ST', 0)
+    
+    def poll(self, polltype):
+        if 'shortPoll' in polltype:
+            self.setDriver('ST', 1)
+            for node in self.poly.nodes():
+                if  node.queryON == True :
+                    node.query()
+                         
     def query(self):
         self.setDriver('ST', 1)
         self.reportDrivers()
@@ -136,7 +144,7 @@ class Controller(polyinterface.Controller):
     }
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]
 
-class MiLightLight(polyinterface.Node):
+class MiLightLight(udi_interface.Node):
 
     def __init__(self, controller, primary, address, name, bridge_host, bridge_port):
 
@@ -292,7 +300,7 @@ class MiLightLight(polyinterface.Node):
                     "NIGHT_MODE": setNightMode
                 }
 
-class MiLightBridge(polyinterface.Node):
+class MiLightBridge(udi_interface.Node):
 
     def __init__(self, controller, primary, address, name, bridge_host, bridge_port):
 
@@ -405,10 +413,12 @@ class MiLightBridge(polyinterface.Node):
                 }
 
 if __name__ == "__main__":
-    try:
-        polyglot = polyinterface.Interface('MiLightNodeServer')
+ try:
+        polyglot = udi_interface.Interface([])
         polyglot.start()
-        control = Controller(polyglot)
-        control.runForever()
+        polyglot.updateProfile()
+        polyglot.setCustomParamsDoc()
+        Controller(polyglot, 'controller', 'controller', 'MiLightNodeServer')
+        polyglot.runForever()
     except (KeyboardInterrupt, SystemExit):
         sys.exit(0)
