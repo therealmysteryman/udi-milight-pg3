@@ -142,6 +142,7 @@ class MiLightLight(udi_interface.Node):
         controller.subscribe(controller.START, self.start, address)
 
     def start(self):
+        LOGGER.info('Test ' + self.name + self.milight_port )
         self.__ConnectWifiBridge()
         self.setDriver('ST', 0, True)
         self.setDriver('GV1', 0, True)
@@ -290,6 +291,7 @@ class MiLightBridge(udi_interface.Node):
         controller.subscribe(controller.START, self.start, address)
 
     def start(self):
+        LOGGER.info('Test ' + self.name + self.milight_port )
         self.__ConnectWifiBridge()
 
         # Init Value
@@ -369,6 +371,7 @@ class MiLightBridge(udi_interface.Node):
                 LOGGER.warning('Unable to setWhiteModeBridgeLamp')
 
     def __ConnectWifiBridge(self):
+        LOGGER.info('Test ' + self.name + self.milight_port )
         if ( self.myMilight.setup(self.milight_host,self.milight_port,self.milight_timeout) == False ):
             LOGGER.error('Unable to setup MiLight')
 
