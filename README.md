@@ -1,4 +1,4 @@
-# MiLight V6 Polyglot V2 Node Server
+# MiLight V6 Polyglot V3 Node Server
 
 ![Build Status](https://travis-ci.org/therealmysteryman/udi-milight-polyglot.svg?branch=master)
 
