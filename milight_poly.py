@@ -165,6 +165,8 @@ class MiLightLight(udi_interface.Node):
             self.grpNum = 3
         elif name == 'Zone4':
             self.grpNum = 4
+            
+        controller.subscribe(controller.START, self.start, address)
 
     def start(self):
         self.__ConnectWifiBridge()
@@ -311,6 +313,8 @@ class MiLightBridge(udi_interface.Node):
         self.milight_host = bridge_host
         self.milight_port = bridge_port
         self.myMilight = MilightWifiBridge()
+        
+        controller.subscribe(controller.START, self.start, address)
 
     def start(self):
         self.__ConnectWifiBridge()
