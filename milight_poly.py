@@ -413,7 +413,7 @@ class MiLightBridge(udi_interface.Node):
                 }
 
 if __name__ == "__main__":
- try:
+    try:
         polyglot = udi_interface.Interface([])
         polyglot.start()
         polyglot.updateProfile()
