@@ -86,12 +86,8 @@ class Controller(udi_interface.Node):
                     node.query()
                          
     def query(self):
-        self.setDriver('ST', 1)
-        self.reportDrivers()
-        for node in self.nodes:
-            if self.nodes[node].queryON == True :
-                self.nodes[node].query()
-            self.nodes[node].reportDrivers()
+        for node in self.poly.nodes():
+            node.reportDrivers()
 
     def heartbeat(self):
         LOGGER.debug('heartbeat: hb={}'.format(self.hb))
@@ -103,11 +99,9 @@ class Controller(udi_interface.Node):
             self.hb = 0
 
     def discover(self, *args, **kwargs):
-        time.sleep(1)
         count = 1
         for myHost in self.milight_host.split(','):
             self.poly.addNode(MiLightBridge(self.poly, 'bridge' + str(count), 'bridge' + str(count), 'Bridge' + str(count), myHost, self.milight_port))
-            time.sleep(1)
             self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone1', 'Zone1', myHost, self.milight_port))
             self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone2', 'Zone2', myHost, self.milight_port))
             self.poly.addNode(MiLightLight(self.poly, 'bridge' + str(count), 'bridge' + str(count) + '_zone3', 'Zone3', myHost, self.milight_port))
@@ -117,31 +111,10 @@ class Controller(udi_interface.Node):
     def delete(self):
         LOGGER.info('Deleting MiLight')
 
-    def check_profile(self):
-        self.profile_info = get_profile_info(LOGGER)
-        # Set Default profile version if not Found
-        cdata = deepcopy(self.polyConfig['customData'])
-        LOGGER.info('check_profile: profile_info={0} customData={1}'.format(self.profile_info,cdata))
-        if not 'profile_info' in cdata:
-            cdata['profile_info'] = { 'version': 0 }
-        if self.profile_info['version'] == cdata['profile_info']['version']:
-            self.update_profile = False
-        else:
-            self.update_profile = True
-            self.poly.installprofile()
-        LOGGER.info('check_profile: update_profile={}'.format(self.update_profile))
-        cdata['profile_info'] = self.profile_info
-        self.saveCustomData(cdata)
-
-    def install_profile(self,command):
-        LOGGER.info("install_profile:")
-        self.poly.installprofile()
-
     id = 'controller'
     commands = {
         'QUERY': query,
-        'DISCOVER': discover,
-        'INSTALL_PROFILE': install_profile,
+        'DISCOVER': discover
     }
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]
 
