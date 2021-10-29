@@ -6,7 +6,7 @@
     "install": "install.sh",
     "shortPoll": "60",
     "longPoll": "3600",
-    "description": "Connect Milight V6 Protocol Lighting system to the ISY994.",
+    "description": "Conytrol Milight V6 Protocol Lighting system.",
     "notice": "https://github.com/therealmysteryman/udi-milight-polyglot/blob/master/LICENSE",
     "credits": [
         {
@@ -33,5 +33,14 @@
             "source": "https://github.com/QuentinCG/Milight-Wifi-Bridge-3.0-Python-Library",
             "license": "https://github.com/QuentinCG/Milight-Wifi-Bridge-3.0-Python-Library/blob/master/LICENSE"
         }
-    ]
+    ],
+    "store": {
+        "developer": "jf.tremblay@gmail.com",
+        "purchaseOptions": [
+            {
+                "isPerpetual": true,
+                "price": 0
+            }
+        ]
+    }
 }
