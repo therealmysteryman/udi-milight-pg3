@@ -55,16 +55,16 @@ class Controller(udi_interface.Node):
         self.poly.Notices.clear()
         try:
             if 'host' in params:
-                self.host = params['host']
+                self.milight_host = params['host']
             else:
-                self.host = ""
+                self.milight_host = ""
 
             if 'port' in params:
-                self.milight_port = int(params['host'])
+                self.milight_port = int(params['port'])
             else:
                 self.milight_port = 5987
                          
-            if self.host == "" :
+            if self.milight_host == "" :
                 self.poly.Notices['cfg'] = 'MiLight requires the "host" parameter to be specified.'
                 LOGGER.error('MiLight requires \'host\' parameters to be specified in custom configuration.')
                 return False
