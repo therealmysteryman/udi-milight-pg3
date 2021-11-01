@@ -84,6 +84,8 @@ class Controller(udi_interface.Node):
             for node in self.poly.nodes():
                 if  node.queryON == True :
                     node.query()
+        else:
+            self.heartbeat()
                          
     def query(self):
         for node in self.poly.nodes():
@@ -128,6 +130,7 @@ class MiLightLight(udi_interface.Node):
         self.milight_host = bridge_host
         self.milight_port = bridge_port
         self.myMilight = MilightWifiBridge()
+        self.parent = controller.getNode(primary)
 
         # Set Zone
         if name == 'Zone1':
@@ -286,6 +289,7 @@ class MiLightBridge(udi_interface.Node):
         self.milight_host = bridge_host
         self.milight_port = bridge_port
         self.myMilight = MilightWifiBridge()
+        self.parent = controller.getNode(primary)
         
         controller.subscribe(controller.START, self.start, address)
 
