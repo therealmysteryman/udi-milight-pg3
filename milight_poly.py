@@ -122,6 +122,9 @@ class Controller(udi_interface.Node):
 
 class MiLightLight(udi_interface.Node):
 
+    COLOR_VALUE = [0x85,0xBA,0x7A,0xD9,0x54,0x1E,0xFF,0x3B]
+    WHITE_TEMP = [0,8,35,61,100]
+    
     def __init__(self, controller, primary, address, name, bridge_host, bridge_port):
 
         super(MiLightLight, self).__init__(controller, primary, address, name)
@@ -185,7 +188,7 @@ class MiLightLight(udi_interface.Node):
             self.setDriver('GV1', intColor,True)
 
     def setColor(self, command):
-        intColor = self.parent.COLOR_VALUE[int(command.get('value'))-1]
+        intColor = self.COLOR_VALUE[int(command.get('value'))-1]
         if (self.myMilight.setColor(intColor,self.grpNum) == False):
             self.__ConnectWifiBridge()
             if (self.myMilight.setColor(intColor,self.grpNum) == False):
@@ -218,7 +221,7 @@ class MiLightLight(udi_interface.Node):
             self.setDriver('GV3', intBri,True)
 
     def setTempColor(self, command):
-        intTemp = self.parent.WHITE_TEMP[int(command.get('value'))-1]
+        intTemp = self.WHITE_TEMP[int(command.get('value'))-1]
         if (self.myMilight.setTemperature(intTemp,self.grpNum) == False):
             self.__ConnectWifiBridge()
             if (self.myMilight.setTemperature(intTemp,self.grpNum) == False):
@@ -281,6 +284,9 @@ class MiLightLight(udi_interface.Node):
 
 class MiLightBridge(udi_interface.Node):
 
+    COLOR_VALUE = [0x85,0xBA,0x7A,0xD9,0x54,0x1E,0xFF,0x3B]
+    WHITE_TEMP = [0,8,35,61,100]
+    
     def __init__(self, controller, primary, address, name, bridge_host, bridge_port):
 
         super(MiLightBridge, self).__init__(controller, primary, address, name)
@@ -334,7 +340,7 @@ class MiLightBridge(udi_interface.Node):
             self.setDriver('GV1', intColor,True)
 
     def setColor(self, command):
-        intColor = self.parent.COLOR_VALUE[int(command.get('value'))-1]
+        intColor = self.COLOR_VALUE[int(command.get('value'))-1]
         if (self.myMilight.setColorBridgeLamp(intColor) == False):
             self.__ConnectWifiBridge()
             if (self.myMilight.setColorBridgeLamp(intColor) == False):
